@@ -1,0 +1,266 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: #000;
+  color: #fff;
+  font-family: 'Courier New', monospace;
+  overflow: hidden;
+  touch-action: none;
+  width: 100vw;
+  height: 100vh;
+}
+
+#game-container {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Overlays */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  backdrop-filter: blur(4px);
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+.menu-panel {
+  background: #1a1a2e;
+  border: 3px solid #4a4a8a;
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  min-width: 300px;
+  box-shadow: 0 0 30px rgba(74, 74, 138, 0.5);
+}
+
+h1 {
+  font-size: 3rem;
+  color: #e0e0ff;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px #000;
+  letter-spacing: 3px;
+}
+
+h2 {
+  font-size: 2rem;
+  color: #e0e0ff;
+  margin-bottom: 20px;
+}
+
+.subtitle {
+  color: #8a8ac0;
+  margin-bottom: 30px;
+  font-size: 1.2rem;
+}
+
+.menu-btn {
+  background: #2a2a4e;
+  border: 2px solid #4a4a8a;
+  color: #e0e0ff;
+  padding: 15px 30px;
+  margin: 10px;
+  font-size: 1.1rem;
+  font-family: 'Courier New', monospace;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 160px;
+}
+
+.menu-btn:hover {
+  background: #3a3a6e;
+  border-color: #6a6aca;
+}
+
+.menu-btn:active {
+  background: #1a1a3e;
+  transform: scale(0.96);
+}
+
+.version {
+  margin-top: 25px;
+  color: #6a6a8a;
+  font-size: 0.85rem;
+}
+
+.controls-hint {
+  margin-top: 25px;
+  text-align: left;
+  background: #0f0f1a;
+  border: 1px solid #3a3a5a;
+  border-radius: 6px;
+  padding: 15px;
+}
+
+.controls-hint h3 {
+  font-size: 1rem;
+  color: #e0e0ff;
+  margin-bottom: 10px;
+}
+
+.controls-hint p {
+  color: #b0b0d0;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+/* Loading overlay */
+#loading-overlay {
+  background: #05050a;
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 200;
+}
+
+#loading-spinner {
+  width: 60px; height: 60px;
+  border: 4px solid #2a2a4e;
+  border-top: 4px solid #4a4a8a;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+#loading-text { color: #e0e0ff; font-size: 1.5rem; margin-bottom: 10px; }
+#loading-progress { color: #8a8ac0; font-size: 1rem; }
+
+/* HUD */
+.hud-top {
+  position: absolute; top: 10px; left: 0; right: 0;
+  display: flex; justify-content: space-around;
+  z-index: 50; pointer-events: none;
+}
+
+.hud-item { text-align: center; }
+.hud-label { color: #8a8ac0; font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; }
+.hud-value { color: #e0e0ff; font-size: 1rem; font-weight: bold; }
+
+.hp-bar, .mp-bar {
+  width: 100px; height: 8px;
+  background: #222;
+  border: 1px solid #444;
+  margin: 4px auto 0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.hp-fill { width: 100%; height: 100%; background: #ff4444; transition: width 0.3s; }
+.mp-fill { width: 100%; height: 100%; background: #4444ff; transition: width 0.3s; }
+
+.hud-bottom {
+  position: absolute; bottom: 80px; left: 0; right: 0;
+  text-align: center; z-index: 50; pointer-events: none;
+}
+.status-value { color: #b0b0d0; font-size: 0.95rem; text-shadow: 1px 1px 2px #000; }
+
+/* Touch controls */
+.touch-controls {
+  position: absolute;
+  bottom: 20px; left: 0; right: 0;
+  display: flex; justify-content: space-between; align-items: flex-end;
+  padding: 20px;
+  z-index: 80;
+  pointer-events: none;
+  max-width: 600px; margin: 0 auto;
+}
+
+.touch-controls * { pointer-events: auto; }
+
+.dpad {
+  display: grid;
+  grid-template-columns: 70px 70px 70px;
+  grid-template-rows: 70px 70px;
+  gap: 8px;
+  align-items: center; justify-items: center;
+}
+
+.dpad-up { grid-column: 2; grid-row: 1; }
+.dpad-left { grid-column: 1; grid-row: 2; }
+.dpad-down { grid-column: 2; grid-row: 3; }
+.dpad-right { grid-column: 3; grid-row: 2; }
+
+.dpad-dir {
+  width: 60px; height: 60px;
+  background: rgba(74, 74, 138, 0.4);
+  border: 2px solid rgba(74, 74, 138, 0.8);
+  border-radius: 50%;
+  color: #e0e0ff;
+  font-size: 2rem;
+  display: flex; align-items: center; justify-content: center;
+  user-select: none;
+}
+
+.dpad-dir:active {
+  background: rgba(100, 100, 180, 0.8);
+  transform: scale(0.9);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 15px;
+  align-items: flex-end;
+}
+
+.action-btn {
+  width: 70px; height: 70px;
+  background: rgba(74, 74, 138, 0.4);
+  border: 2px solid rgba(74, 74, 138, 0.8);
+  border-radius: 50%;
+  color: #e0e0ff;
+  font-size: 0.75rem;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  text-align: center;
+}
+
+.action-btn:active {
+  background: rgba(100, 100, 180, 0.8);
+  transform: scale(0.9);
+}
+
+#btn-attack { border-color: rgba(255, 68, 68, 0.8); color: #ff4444; }
+#btn-attack:active { background: rgba(255, 68, 68, 0.3); }
+
+#btn-magic { border-color: rgba(68, 68, 255, 0.8); color: #4444ff; }
+#btn-magic:active { background: rgba(68, 68, 255, 0.3); }
+
+#btn-interact { border-color: rgba(68, 255, 68, 0.8); color: #44ff44; }
+#btn-interact:active { background: rgba(68, 255, 68, 0.3); }
+
+/* Hide touch controls on desktop if no touch */
+@media (pointer: fine) {
+  .touch-controls { display: none !important; }
+}

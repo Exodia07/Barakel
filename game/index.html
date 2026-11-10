@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#1a1a2e">
+  <title>Barakel - The Fallen Angel</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/js/controls/OrbitControls.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/controls.js"></script>
+  <script src="js/world.js"></script>
+  <script src="js/game.js"></script>
+</head>
+<body>
+  <!-- Game container -->
+  <div id="game-container"></div>
+
+  <!-- Loading overlay -->
+  <div id="loading-overlay">
+    <div id="loading-spinner"></div>
+    <div id="loading-text">Barakel - The Fallen Angel</div>
+    <div id="loading-progress">Loading...</div>
+  </div>
+
+  <!-- Start menu -->
+  <div id="start-menu" class="overlay hidden">
+    <div class="menu-panel">
+      <h1>BARAKEL</h1>
+      <div class="subtitle">The Fallen Angel</div>
+      <button id="btn-new-game" class="menu-btn">New Game</button>
+      <button id="btn-resume" class="menu-btn hidden">Resume</button>
+      <button id="btn-controls" class="menu-btn">Controls</button>
+      <div class="controls-hint hidden" id="controls-hint">
+        <h3>Controls</h3>
+        <p><strong>Touch:</strong> Left = move • Right = attack/magic/interact</p>
+        <p><strong>Controller:</strong> Left stick/D-pad = move • A = attack • B = magic • X = interact</p>
+        <button id="btn-close-controls" class="menu-btn">Close</button>
+      </div>
+      <p class="version">Ported for Android &bull; Touch + Controller support</p>
+    </div>
+  </div>
+
+  <!-- Game UI overlay -->
+  <div id="game-ui" class="overlay hidden">
+    <!-- Top HUD -->
+    <div class="hud-top">
+      <div class="hud-item">
+        <span class="hud-label">HP</span>
+        <div class="hp-bar"><div id="hp-fill" class="hp-fill"></div></div>
+        <span id="hp-text" class="hud-value">100/100</span>
+      </div>
+      <div class="hud-item">
+        <span class="hud-label">MP</span>
+        <div class="mp-bar"><div id="mp-fill" class="mp-fill"></div></div>
+        <span id="mp-text" class="hud-value">50/50</span>
+      </div>
+      <div class="hud-item">
+        <span class="hud-label">LEVEL</span>
+        <span id="level-text" class="hud-value">1</span>
+      </div>
+      <div class="hud-item">
+        <span class="hud-label">SCORE</span>
+        <span id="score-text" class="hud-value">0</span>
+      </div>
+    </div>
+
+    <!-- Touch controls (mobile) -->
+    <div id="touch-controls" class="touch-controls">
+      <!-- Left side: Movement D-pad -->
+      <div class="dpad">
+        <div class="dpad-dir dpad-up" data-dir="up">&#9650;</div>
+        <div class="dpad-dir dpad-left" data-dir="left">&#9664;</div>
+        <div class="dpad-dir dpad-down" data-dir="down">&#9660;</div>
+        <div class="dpad-dir dpad-right" data-dir="right">&#9654;</div>
+      </div>
+
+      <!-- Right side: Action buttons -->
+      <div class="action-buttons">
+        <button class="action-btn" id="btn-attack" data-action="attack">Attack</button>
+        <button class="action-btn" id="btn-magic" data-action="magic">Magic</button>
+        <button class="action-btn" id="btn-interact" data-action="interact">Use</button>
+      </div>
+    </div>
+
+    <!-- Bottom status -->
+    <div class="hud-bottom">
+      <span id="status-text" class="status-value">Explore the tomb...</span>
+    </div>
+
+    <!-- Pause / Game Over overlay -->
+    <div id="pause-menu" class="overlay hidden">
+      <div class="menu-panel">
+        <h2>Paused</h2>
+        <button id="btn-resume-game" class="menu-btn">Resume</button>
+        <button id="btn-restart-game" class="menu-btn">Restart</button>
+        <button id="btn-main-menu" class="menu-btn">Main Menu</button>
+      </div>
+    </div>
+
+    <div id="gameover-menu" class="overlay hidden">
+      <div class="menu-panel">
+        <h2 style="color:#ff4444;">GAME OVER</h2>
+        <button id="btn-restart-go" class="menu-btn">Try Again</button>
+        <button id="btn-menu-go" class="menu-btn">Main Menu</button>
+      </div>
+    </div>
+
+    <div id="victory-menu" class="overlay hidden">
+      <div class="menu-panel">
+        <h2 style="color:#44ff44;">VICTORY</h2>
+        <span id="final-score" class="hud-value">Score: 0</span>
+        <button id="btn-restart-victory" class="menu-btn">Play Again</button>
+        <button id="btn-menu-victory" class="menu-btn">Main Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize game when DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+      window.game = new BarakelGame();
+      window.game.init();
+    });
+  </script>
+</body>
+</html>
